@@ -1,0 +1,37 @@
+type Event {
+  id: String!
+  title: String!
+  description: String
+  date: String
+  geoType: String
+  coordinates: [CoordWrapper] @materializer(query: "coordinates")
+}
+
+type CoordWrapper {
+  lat: String
+  lon: String
+}
+
+type Query {
+  getAllEvents: [Event]
+    @rest(
+      endpoint: "https://eonet.sci.gsfc.nasa.gov/api/v3/events/$id?limit=1"
+      configuration: "nasa_config"
+    )
+
+  getEventById(id: String!): Event
+    @rest(
+      endpoint: "https://eonet.sci.gsfc.nasa.gov/api/v3/events/$id?limit=1"
+      configuration: "nasa_config"
+      setters: [
+        { field: "date", path: "geometry[].date" }
+        { field: "geoType", path: "geometry[].type" }
+      ]
+    )
+
+  coordinates(id: String!): [CoordWrapper]
+    @rest(
+      endpoint: "https://us-central1-stepzen-web-staging.cloudfunctions.net/keyArraytoValueArray/?root=root.geometry[0].coordinates&fields=lat,lon&url=https://eonet.sci.gsfc.nasa.gov/api/v3/events/$id?limit=1"
+      configuration: "nasa_config"
+    )
+}
