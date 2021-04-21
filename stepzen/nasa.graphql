@@ -3,7 +3,12 @@ type Event {
   title: String!
   description: String
   date: String
-  geoType: String
+  link: String
+  coordinateType: String
+  magnitudeValue: String
+  magnitudeUnit: String
+  sources: [EventSource] @materializer(query: "sources")
+  category: [EventCategory] @materializer(query: "categories")
   coordinates: [CoordWrapper] @materializer(query: "coordinates")
 }
 
@@ -12,26 +17,62 @@ type CoordWrapper {
   lon: String
 }
 
+type Image {
+  image: String
+}
+
+type EventCategory {
+  id: String
+  title: String
+}
+
+type EventSource {
+  id: String
+  url: String
+}
+
 type Query {
-  getAllEvents: [Event]
+  events: [Event]
     @rest(
-      endpoint: "https://eonet.sci.gsfc.nasa.gov/api/v3/events/$id?limit=1"
+      endpoint: "https://eonet.sci.gsfc.nasa.gov/api/v3/events"
       configuration: "nasa_config"
+      resultroot: "events[]"
     )
 
-  getEventById(id: String!): Event
+  event(id: String!): Event
     @rest(
       endpoint: "https://eonet.sci.gsfc.nasa.gov/api/v3/events/$id?limit=1"
       configuration: "nasa_config"
       setters: [
         { field: "date", path: "geometry[].date" }
-        { field: "geoType", path: "geometry[].type" }
+        { field: "coordinateType", path: "geometry[].type" }
+        { field: "magnitudeUnit", path: "geometry[].magnitudeUnit" }
+        { field: "magnitudeValue", path: "geometry[].magnitudeValue" }
       ]
+    )
+
+  sources(id: String!): [EventSource]
+    @rest(
+      endpoint: "https://eonet.sci.gsfc.nasa.gov/api/v3/events/$id?limit=1"
+      configuration: "nasa_config"
+      resultroot: "sources[]"
+    )
+
+  categories(id: String!): [EventCategory]
+    @rest(
+      endpoint: "https://eonet.sci.gsfc.nasa.gov/api/v3/events/$id?limit=1"
+      configuration: "nasa_config"
+      resultroot: "categories[]"
     )
 
   coordinates(id: String!): [CoordWrapper]
     @rest(
-      endpoint: "https://us-central1-stepzen-web-staging.cloudfunctions.net/keyArraytoValueArray/?root=root.geometry[0].coordinates&fields=lat,lon&url=https://eonet.sci.gsfc.nasa.gov/api/v3/events/$id?limit=1"
+      endpoint: "https://us-central1-stepzen-web-staging.cloudfunctions.net/keyArraytoValueArray/?root=root.geometry[0].coordinates&fields=lon,lat&url=https://eonet.sci.gsfc.nasa.gov/api/v3/events/$id?limit=1"
       configuration: "nasa_config"
+    )
+
+  image(lat: String!, lon: String!, date: String!, dim: String!): Image
+    @rest(
+      endpoint: "https://api.nasa.gov/planetary/earth/imagery?lon=$lon&lat=$lat&date=$date&dim=$dim&api_key=$apikey"
     )
 }
