@@ -1,6 +1,7 @@
 import React from "react"
 import styled from "styled-components"
-import { Main, Navbar, Footer } from "../Styled"
+import { Main, Sidebar } from "../Styled"
+import LeafletMap from "./LeafletMap"
 
 const Container = styled.div`
   width: 100%;
@@ -9,9 +10,10 @@ const Container = styled.div`
 const Map = () => {
   return (
     <Main className="Map-Landing">
-      <Navbar />
-      <Container className="Map-Wrapper"></Container>
-      <Footer />
+      <Sidebar />
+      <Container className="Map-Wrapper">
+        <LeafletMap />
+      </Container>
     </Main>
   )
 }
