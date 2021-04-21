@@ -1,6 +1,7 @@
 import { React } from "react"
 import { useQuery, gql } from "@apollo/client"
 import { useParams } from "react-router-dom"
+import EventImage from "./EventImage"
 
 function Event() {
   const { event_id } = useParams()
@@ -54,6 +55,14 @@ function Event() {
             )
           })}
       </div>
+      <div>
+        <EventImage
+          lat={eventData.coordinates[0].lat}
+          lon={eventData.coordinates[0].lon}
+          date={eventData.date.substr(0, 10)}
+          dim="0.2"
+        />
+      </div>
     </div>
   )
 }
@@ -83,4 +92,5 @@ const FETCH_EVENT_BY_ID = gql`
     }
   }
 `
+
 export default Event
