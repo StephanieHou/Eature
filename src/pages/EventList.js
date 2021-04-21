@@ -1,17 +1,13 @@
 import { React } from "react"
 import { useQuery, gql } from "@apollo/client"
-import { useParams } from "react-router-dom"
 
-function Event() {
-  const { event_id } = useParams()
-
-  const { loading, error, data } = useQuery(FETCH_EVENT_BY_ID, {
-    variables: { event_id },
-  })
+function EventList() {
+  const { loading, error, data } = useQuery(FETCH_ALL_EVENTS)
 
   if (loading) {
     return <div>Loading...</div>
   }
+
   if (error) {
     return (
       <div>
@@ -23,7 +19,7 @@ function Event() {
     )
   }
 
-  const eventData = data.event
+  const eventData = data
   console.log(eventData)
 
   return (
@@ -58,9 +54,9 @@ function Event() {
   )
 }
 
-const FETCH_EVENT_BY_ID = gql`
-  query GetEventById($event_id: String!) {
-    event(id: $event_id) {
+const FETCH_ALL_EVENTS = gql`
+  query allEvents {
+    events {
       date
       description
       id
@@ -83,4 +79,4 @@ const FETCH_EVENT_BY_ID = gql`
     }
   }
 `
-export default Event
+export default EventList
