@@ -2,3 +2,6 @@ configurationset:
   - configuration:
       name: nasa_config
       apikey: DEMO_KEY
+  - configuration:
+      name: predicthq_config
+      bearerToken: <token>
