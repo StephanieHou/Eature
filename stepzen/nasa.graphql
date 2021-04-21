@@ -34,8 +34,9 @@ type EventSource {
 type Query {
   events: [Event]
     @rest(
-      endpoint: "https://eonet.sci.gsfc.nasa.gov/api/v3/events/$id?limit=1"
+      endpoint: "https://eonet.sci.gsfc.nasa.gov/api/v3/events"
       configuration: "nasa_config"
+      resultroot: "events[]"
     )
 
   event(id: String!): Event
