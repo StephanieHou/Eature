@@ -3,6 +3,7 @@ import styled from "styled-components"
 import { Main, Sidebar } from "../Styled"
 import LeafletMap from "./LeafletMap"
 
+const { NASA_API_KEY } = process.env
 const Container = styled.div`
   width: 100%;
 `
@@ -12,9 +13,16 @@ const Map = () => {
 
   useEffect(() => {
     async function fetchData() {
+      const api_key = NASA_API_KEY
+
+      // TODO use a UI widget for these values:
+      const limit = 25
+      const start = "2020-01-01"
+      const end = "2021-04-22"
+
       // You can await here
       const response = await fetch(
-        "https://eonet.sci.gsfc.nasa.gov/api/v3/events"
+        `https://eonet.sci.gsfc.nasa.gov/api/v3/events?api_key=${api_key}&limit=${limit}&start=${start}&end=${end}`
       )
 
       if (!response.ok) {
