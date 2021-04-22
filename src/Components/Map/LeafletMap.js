@@ -48,10 +48,10 @@ const LeafletMap = ({ data, id, setEventID }) => {
                 <Popup>
                   {event.title}
                   <br />
-                  {"Lat:"}
+                  {"Lat: "}
                   {parseFloat(event.geometry[0].coordinates[0])}
                   <br />
-                  {"Long:"}{parseFloat(event.geometry[0].coordinates[1])}
+                  {"Long: "}{parseFloat(event.geometry[0].coordinates[1])}
                   <br />  <br />
                   Type: {event.categories[0].title}
                   <br />

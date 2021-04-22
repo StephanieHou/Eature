@@ -17,7 +17,7 @@ const Map = () => {
     async function fetchData() {
       const api_key = NASA_API_KEY
 
-      const limit = 50
+      const limit = 70
       const start = "2020-01-01"
       const end = "2021-04-22"
 
@@ -39,7 +39,7 @@ const Map = () => {
 
   return (
     <Main className="Map-Landing">
-      <Sidebar id={eventID} />
+      <Sidebar id={eventID} events={events} />
       <Container className="Map-Wrapper">
         <LeafletMap data={events} id={eventID} setEventID={setEventID} />
       </Container>
