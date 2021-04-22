@@ -23,14 +23,17 @@ const LeafletMap = ({ data }) => {
             data.map((event, i) => (
               <Marker
                 key={i}
-                position={[
-                  parseFloat(event.geometry[0].coordinates[0]),
+                position={parseFloat(event.geometry[0].coordinates[1])?[
+                  parseFloat(event.geometry[0].coordinates[1]),
                   parseFloat(event.geometry[0].coordinates[0])
-                ]}
+                ]: [
+                    1.0,
+                    parseFloat(event.geometry[0].coordinates[0])
+                  ]}
               >
                 <Popup>
                   {event.title}
-                  <br/>
+                  <br />
                   {parseFloat(event.geometry[0].coordinates[0])}{" "}
                   {parseFloat(event.geometry[0].coordinates[1])}
                 </Popup>
