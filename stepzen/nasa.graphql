@@ -7,6 +7,8 @@ type Event {
   coordinateType: String
   magnitudeValue: String
   magnitudeUnit: String
+  sources: [EventSource] @materializer(query: "sources")
+  category: [EventCategory] @materializer(query: "categories")
   coordinates: [CoordWrapper] @materializer(query: "coordinates")
 }
 
@@ -30,9 +32,9 @@ type EventSource {
 }
 
 type Query {
-  events(limit: String!): [Event]
+  events(limit: String!, start: String!, end: String!): [Event]
     @rest(
-      endpoint: "https://eonet.sci.gsfc.nasa.gov/api/v3/events?api_key=$api_key&limit=$limit"
+      endpoint: "https://eonet.sci.gsfc.nasa.gov/api/v3/events?api_key=$api_key&limit=$limit&start=$start&end=$end"
       configuration: "nasa_config"
       resultroot: "events[]"
       setters: [{ field: "date", path: "geometry[].date" }]
@@ -48,6 +50,20 @@ type Query {
         { field: "magnitudeUnit", path: "geometry[].magnitudeUnit" }
         { field: "magnitudeValue", path: "geometry[].magnitudeValue" }
       ]
+    )
+
+  sources(id: String!): [EventSource]
+    @rest(
+      endpoint: "https://eonet.sci.gsfc.nasa.gov/api/v3/events/$id?limit=1"
+      configuration: "nasa_config"
+      resultroot: "sources[]"
+    )
+
+  categories(id: String!): [EventCategory]
+    @rest(
+      endpoint: "https://eonet.sci.gsfc.nasa.gov/api/v3/events/$id?limit=1"
+      configuration: "nasa_config"
+      resultroot: "categories[]"
     )
 
   coordinates(id: String!): [CoordWrapper]

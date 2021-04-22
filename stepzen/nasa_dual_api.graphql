@@ -1,3 +1,5 @@
+# TODO: Dual REST API data sources. This is not working yet.
+
 interface Event {
   id: String!
   title: String!
@@ -132,5 +134,4 @@ type Query {
       endpoint: "https://us-central1-stepzen-web-staging.cloudfunctions.net/keyArraytoValueArray/?root=location&fields=lon,lat&url=https://eonet.sci.gsfc.nasa.gov/api/v3/events/$id?limit=1&api_key=$api_key"
       configuration: "predicthq_config"
     )
-
 }
