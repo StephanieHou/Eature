@@ -1,4 +1,4 @@
-type Event {
+interface Event {
   id: String!
   title: String!
   description: String
@@ -7,9 +7,34 @@ type Event {
   coordinateType: String
   magnitudeValue: String
   magnitudeUnit: String
-  sources: [EventSource] @materializer(query: "sources")
-  category: [EventCategory] @materializer(query: "categories")
-  coordinates: [CoordWrapper] @materializer(query: "coordinates")
+  # sources: [EventSource]
+  # category: EventCategory
+  coordinates: [CoordWrapper]
+  count: String
+}
+
+type NASAEvent implements Event {
+  id: String!
+  title: String!
+  description: String
+  date: String
+  link: String
+  coordinateType: String
+  magnitudeValue: String
+  magnitudeUnit: String
+  # sources: [EventSource] @materializer(query: "sources")
+  # category: EventCategory @materializer(query: "NASACategories")
+  coordinates: [CoordWrapper] @materializer(query: "NASACoordinates")
+}
+
+type PHQEvent implements Event {
+  id: String!
+  title: String!
+  description: String
+  date: String
+  count: String
+  # category: PEventCategory @materializer(query: "peventcategory")
+  # coordinates: [CoordWrapper] @materializer(query: "PHQCoordinates")
 }
 
 type CoordWrapper {
@@ -32,43 +57,88 @@ type EventSource {
 }
 
 type Query {
-  events: [Event]
+  events(limit: String!, start: String!, end: String!): [Event]
+  event(id: String!): Event
+
+  NASAEvents(limit: String!, start: String!, end: String!): [NASAEvent]
+    @supplies(query: "events")
     @rest(
-      endpoint: "https://eonet.sci.gsfc.nasa.gov/api/v3/events"
+      endpoint: "https://eonet.sci.gsfc.nasa.gov/api/v3/events?limit=$limit&start=$start&end=$end&api_key=$api_key"
       configuration: "nasa_config"
       resultroot: "events[]"
+      setters: [
+        { field: "date", path: "geometry[].date" }
+        # { field: "category", path: "categories[].title" }
+      ]
     )
 
-  event(id: String!): Event
+  PHQEvents(limit: String!, start: String!, end: String!): [PHQEvent]
+    @supplies(query: "events")
     @rest(
-      endpoint: "https://eonet.sci.gsfc.nasa.gov/api/v3/events/$id?limit=1"
+      endpoint: "https://api.PHQ.com/v1/events?category=disasters&limit=$limit&start.gte=$start&end.lte=$end"
+      configuration: "predicthq_config"
+      resultroot: "results[]"
+      setters: [
+        { field: "date", path: "start" }
+        # { field: "coordinates", path: "location[]" }
+      ]
+    )
+
+  NASAEvent(id: String!): NASAEvent
+    @supplies(query: "event")
+    @rest(
+      endpoint: "https://eonet.sci.gsfc.nasa.gov/api/v3/events/$id?limit=1&api_key=$api_key"
       configuration: "nasa_config"
       setters: [
         { field: "date", path: "geometry[].date" }
+        # { field: "category", path: "categories[].title" }
         { field: "coordinateType", path: "geometry[].type" }
         { field: "magnitudeUnit", path: "geometry[].magnitudeUnit" }
         { field: "magnitudeValue", path: "geometry[].magnitudeValue" }
       ]
     )
 
+  PHQEvent(id: String!): PHQEvent
+    @supplies(query: "event")
+    @rest(
+      endpoint: "https://api.PHQ.com/v1/events?id=$id"
+      configuration: "predicthq_config"
+      resultroot: "results[]"
+      setters: [{ field: "date", path: "start" }]
+    )
+
   sources(id: String!): [EventSource]
     @rest(
-      endpoint: "https://eonet.sci.gsfc.nasa.gov/api/v3/events/$id?limit=1"
+      endpoint: "https://eonet.sci.gsfc.nasa.gov/api/v3/events/$id?limit=1&api_key=$api_key"
       configuration: "nasa_config"
       resultroot: "sources[]"
     )
 
-  categories(id: String!): [EventCategory]
+  NASACategories(id: String!): [EventCategory]
     @rest(
-      endpoint: "https://eonet.sci.gsfc.nasa.gov/api/v3/events/$id?limit=1"
+      endpoint: "https://eonet.sci.gsfc.nasa.gov/api/v3/events/$id?limit=1&api_key=$api_key"
       configuration: "nasa_config"
-      resultroot: "categories[]"
+      # resultroot: "categories[]"
+      # setters: [{ field: "category", path: "categories[].title" }]
     )
 
-  coordinates(id: String!): [CoordWrapper]
+  # peventcategory(id: String!): PEventCategory
+  #   @rest(
+  #     endpoint: "https://api.PHQ.com/v1/events?category=disasters&limit=$limit&start.gte=$start&start.lte=$end"
+  #     configuration: "predicthq_config"
+  #     resultroot: ""
+  #   )
+
+  NASACoordinates(id: String!): [CoordWrapper]
     @rest(
-      endpoint: "https://us-central1-stepzen-web-staging.cloudfunctions.net/keyArraytoValueArray/?root=root.geometry[0].coordinates&fields=lon,lat&url=https://eonet.sci.gsfc.nasa.gov/api/v3/events/$id?limit=1"
+      endpoint: "https://us-central1-stepzen-web-staging.cloudfunctions.net/keyArraytoValueArray/?root=root.geometry[0].coordinates&fields=lon,lat&url=https://eonet.sci.gsfc.nasa.gov/api/v3/events/$id?limit=1&api_key=$api_key"
       configuration: "nasa_config"
+    )
+
+  PHQCoordinates(id: String!): [CoordWrapper]
+    @rest(
+      endpoint: "https://us-central1-stepzen-web-staging.cloudfunctions.net/keyArraytoValueArray/?root=location&fields=lon,lat&url=https://eonet.sci.gsfc.nasa.gov/api/v3/events/$id?limit=1&api_key=$api_key"
+      configuration: "predicthq_config"
     )
 
   image(lat: String!, lon: String!, date: String!, dim: String!): Image
