@@ -10,6 +10,17 @@ Visualize events recorded by NASA's Earth Observatory Natural Event Tracker (EON
 
 [StepZen](https://my.stepzen.com/)
 
+Can't get past this error:
+
+```
+Deploying to StepZen...... !
+(node:69868) UnhandledPromiseRejectionWarning: SyntaxError: Unexpected token A in JSON at position 0
+    at JSON.parse (<anonymous>)
+    at logError (/usr/local/lib/node_modules/stepzen/lib/start/deploy.js:47:34)
+    at Object.exports.default [as deploy] (/usr/local/lib/node_modules/stepzen/lib/start/deploy.js:59:17)
+(node:69868) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). To terminate the node process on unhandled promise rejection, use the CLI flag `--unhandled-rejections=strict` (see https://nodejs.org/api/cli.html#cli_unhandled_rejections_mode). (rejection id: 17)
+```
+
 # Dev Setup
 
 `npm install -g stepzen`
@@ -23,6 +34,22 @@ Starts React frontend
 ### `stepzen start`
 
 Launches local stepzen graphiql explorer and backend data sources
+
+# Dev Tips
+
+If NASA imagery api gives you:
+
+```json
+{ "msg": "No imagery for specified date.", "service_version": "v5000" }
+```
+
+for [URL](https://api.nasa.gov/planetary/earth/imagery?lon=-101.05&lat=-74.95&date=2017-09-23&dim=0.2&api_key=DEMO_KEY)
+
+```
+https://api.nasa.gov/planetary/earth/imagery?lon=-101.05&lat=-74.95&date=2017-09-23&dim=0.2&api_key=DEMO_KEY
+```
+
+The issue is...
 
 # Production Deployment
 
