@@ -3,6 +3,7 @@ import { Link } from "react-router-dom"
 import { SiOpenstreetmap } from "react-icons/si"
 import { GiWorld } from "react-icons/gi"
 import styled from "styled-components"
+import { DatePicker } from "../Styled"
 import Logo from "../../Images/Logo.png"
 
 const SidebarDiv = styled.div`
@@ -75,6 +76,43 @@ const SlideDiv = styled.div`
 const InnerSlideDiv = styled.div`
   width: 100%;
   height: 93%;
+  padding: 0px;
+`
+
+const FilterDiv = styled.div`
+  width: 100%;
+  height: 100px;
+  overflow: scroll;
+  padding: 0px 20px;
+  text-align: left;
+  font-family: "Quicksand";
+  font-size: 14px;
+
+  input#limit{
+    width: 40px;
+  }
+
+  input{
+    width: 76px;
+    text-align: center;
+    border: 1px solid var(--color-5); 
+    background: none;
+    color: var(--color-5); 
+    margin-bottom: 10px;
+    margin: 4px;
+  }
+
+  p{
+    font-size: 16px;
+    margin: 6px 0px;
+  }
+
+
+`
+
+const Events = styled.div`
+  width: 100%;
+  height: 86%;
   overflow: scroll;
   padding: 0px;
 `
@@ -104,16 +142,20 @@ const Title = styled.h1`
   color: var(--color-5);
 `
 
-const Sidebar = ({ id, events }) => {
+const Sidebar = ({
+  id,
+  events,
+  limit,
+  setLimit,
+  startDate,
+  setStartDate,
+  endDate,
+  setEndDate,
+}) => {
   const [open, setOpen] = useState(false)
   const [title, setTitle] = useState("")
   const [infoLink, setInfoLink] = useState(false)
   const [dataLink, setDataLink] = useState(false)
-
-  useEffect(() => {
-    setInfoLink((infoLink) => false)
-    setDataLink(false)
-  }, [])
 
   useEffect(() => {
     setTitle("Information")
@@ -154,24 +196,43 @@ const Sidebar = ({ id, events }) => {
           <div>Coming Soon</div>
         ) : (
           <InnerSlideDiv className="Events-List">
-            {events &&
-              events.map((event, i) => (
-                <Event type={event.categories[0].title}>
-                  <a href={event.sources[0].url} target="_blank">
-                    {event.title}
-                  </a>
-                  <p>Type: {event.categories[0].title}</p>
-                  <p>Date: {event.geometry[0].date}</p>
-                  {event.geometry[0].magnitudeValue ? (
-                    <p>
-                      Magnitude: {event.geometry[0].magnitudeValue}{" "}
-                      {event.geometry[0].magnitudeUnit}
-                    </p>
-                  ) : (
-                    ""
-                  )}
-                </Event>
-              ))}
+            <FilterDiv>
+              <p>Filter By</p>
+              {"Limit of  "}
+              <input
+                id="limit"
+                type="text"
+                value={limit}
+                onChange={(e) => setLimit(Number(e.target.value))}
+              />
+              <br/>
+               {"Date from "} <DatePicker date={startDate} setDate={setStartDate} /> {" to "}
+                <DatePicker date={endDate} setDate={setEndDate} />
+            </FilterDiv>
+            <Events>
+              {events &&
+                events.map((event, i) => (
+                  <Event type={event.categories[0].title}>
+                    <a
+                      href={event.sources[0].url}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {event.title}
+                    </a>
+                    <p>Type: {event.categories[0].title}</p>
+                    <p>Date: {event.geometry[0].date}</p>
+                    {event.geometry[0].magnitudeValue ? (
+                      <p>
+                        Magnitude: {event.geometry[0].magnitudeValue}{" "}
+                        {event.geometry[0].magnitudeUnit}
+                      </p>
+                    ) : (
+                      ""
+                    )}
+                  </Event>
+                ))}
+            </Events>
           </InnerSlideDiv>
         )}
       </SlideDiv>
