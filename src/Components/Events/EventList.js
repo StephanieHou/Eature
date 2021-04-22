@@ -1,4 +1,6 @@
-import { React, useQuery } from "react"
+import { React } from "react"
+import { useParams } from "react-router-dom"
+import { useQuery } from "@apollo/client"
 import gql from "graphql-tag"
 import styled from "styled-components"
 import { Main, Navbar, Footer } from "../Styled"
@@ -13,31 +15,42 @@ const Loader = styled.div`
 `
 
 function EventList() {
-  const limit = 10
-  const start = "2021-01-01"
-  const end = "2021-04-22"
+  const { limit, start, end } = useParams()
   console.log(limit, start, end)
 
   const { loading, error, data } = useQuery(FETCH_EVENTS_DATE_RANGE, {
-    variables: { limit: "10", start: "2021-01-01", end: "2021-04-22" },
+    variables: { limit, start, end },
+    errorPolicy: "all",
   })
   console.log(loading, error, data)
-  const events = data.events
 
   return (
     <Main className="EventList">
       <Navbar />
       <Container className="EventList-Wrapper">
-        {events && (
+        {loading && (
           <Loader>
             <Spinner />
           </Loader>
         )}
+        {error && (
+          <div>
+            <h1>Error :(</h1>
+            <div>
+              <p>{JSON.stringify(error)}</p>
+            </div>
+          </div>
+        )}
+        {!loading && !data.events && (
+          <div>No events found for that date range.</div>
+        )}
         <div>
           <ol>
-            {events &&
-              events.map((evt) => (
-                <li key={evt.id}>
+            {/* {data &&
+              data.events &&
+              data.events.length > 0 &&
+              data.events.map((evt, i) => (
+                <li key={i}>
                   <a href={"/events/" + evt.id}>
                     {evt.title} |{" "}
                     {evt.geometry[0] &&
@@ -47,7 +60,7 @@ function EventList() {
                       }).format(new Date(evt.geometry[0].date))}
                   </a>
                 </li>
-              ))}
+              ))} */}
           </ol>
         </div>
       </Container>

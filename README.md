@@ -51,6 +51,10 @@ https://api.nasa.gov/planetary/earth/imagery?lon=-101.05&lat=-74.95&date=2017-09
 
 The issue is...
 
+## TypeError: Object(...) is not a function
+
+Make sure you're importing `useQuery` from "@apollo/client"! Or, you're importing a hook from the wrong module!
+
 # Production Deployment
 
 todo

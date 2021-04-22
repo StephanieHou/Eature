@@ -1,7 +1,7 @@
 import { React } from "react"
+import { useParams } from "react-router-dom"
 import { useQuery } from "@apollo/client"
 import gql from "graphql-tag"
-import { useParams } from "react-router-dom"
 import EventImage from "./EventImage"
 
 function Event() {
