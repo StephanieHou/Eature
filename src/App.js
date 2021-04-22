@@ -1,6 +1,6 @@
 import React from "react"
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
-import Event from "./Components/Event"
+import Event from "./Components/Events/Event"
 import EventList from "./Components/Events/EventList"
 import Home from "./Components/Home/Home"
 import Map from "./Components/Map/Map"

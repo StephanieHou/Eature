@@ -12,6 +12,8 @@ const Header = styled.div`
   width: 100%;
   padding: 10px 10%;
   padding-bottom: 100px;
+  height: 90vh;
+  min-height: 700px;
 `
 
 const AnimatedTextDiv = styled.div`
@@ -24,6 +26,30 @@ const HeaderText = styled.p`
   padding: 10px 0px;
   margin: 0px;
   font-weight: bold;
+
+  @media only screen and (max-width: 1100px) {
+    font-size: 3.2vw;
+  }
+
+  @media only screen and (max-width: 940px) {
+    font-size: 3.6vw;
+  }
+
+  @media only screen and (max-width: 790px) {
+    font-size: 4.2vw;
+  }
+
+  @media only screen and (max-width: 590px) {
+    font-size: 4.6vw;
+  }
+
+  @media only screen and (max-width: 450px) {
+    font-size: 5vw;
+  }
+
+  @media only screen and (max-width: 390px) {
+    font-size: 6vw;
+  }
 `
 
 const Section = styled.div`
@@ -75,6 +101,7 @@ const Home = () => {
             <AnimatedText
               backgroundImg={AnimatedBg}
               fontsize={"11vw"}
+              lgfontsize={"12vw"}
               text={"Trace The \nEarth's Events "}
             />
           </AnimatedTextDiv>

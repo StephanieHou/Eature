@@ -1,6 +1,5 @@
 import React, { useState } from "react"
 import { Link } from "react-router-dom"
-import { FaMapMarkedAlt } from "react-icons/fa"
 import { SiOpenstreetmap } from "react-icons/si"
 import { GiWorld } from "react-icons/gi"
 import styled from "styled-components"

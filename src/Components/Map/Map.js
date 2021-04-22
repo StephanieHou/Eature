@@ -12,7 +12,6 @@ const Map = () => {
 
   useEffect(() => {
     async function fetchData() {
-      // You can await here
       const response = await fetch(
         "https://eonet.sci.gsfc.nasa.gov/api/v3/events"
       )
