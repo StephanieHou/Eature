@@ -1,4 +1,5 @@
-import { React, useEffect, useState } from "react"
+import { React, useEffect, useState, useQuery } from "react"
+import { gql } from "@apollo/client"
 import styled from "styled-components"
 
 import Spinner from "../Spinner"
@@ -19,6 +20,7 @@ function EventList() {
    *
    * Have to fetch the old way...
    */
+  /*
   const [events, setEvents] = useState(null)
 
   useEffect(() => {
@@ -38,6 +40,10 @@ function EventList() {
     }
     fetchData()
   }, [])
+  */
+  const { loading, error, data } = useQuery(FETCH_ALL_EVENTS)
+  console.log(loading, error, data)
+  const events = data.events
 
   return (
     <Main className="EventList">
@@ -73,7 +79,7 @@ function EventList() {
 
 /*
 TODO: see above re: Too Many Requests
-
+*/
 const FETCH_ALL_EVENTS = gql`
   query allEvents {
     events {
@@ -98,6 +104,5 @@ const FETCH_ALL_EVENTS = gql`
     }
   }
 `
-*/
 
 export default EventList
