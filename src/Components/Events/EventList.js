@@ -1,5 +1,5 @@
-import { React, useEffect, useState, useQuery } from "react"
-import { gql } from "@apollo/client"
+import { React, useQuery } from "react"
+import gql from "graphql-tag"
 import styled from "styled-components"
 import { Main, Navbar, Footer } from "../Styled"
 import Spinner from "./Spinner"
@@ -13,34 +13,14 @@ const Loader = styled.div`
 `
 
 function EventList() {
-  /**
-   * TODO: we get tons of errors `Connector: HTTP Error: Too Many Requests` using Apollo.
-   *   `const { loading, error, data } = useQuery(FETCH_ALL_EVENTS)`
-   *
-   * Have to fetch the old way...
-   */
-  /*
-  const [events, setEvents] = useState(null)
+  const limit = 10
+  const start = "2021-01-01"
+  const end = "2021-04-22"
+  console.log(limit, start, end)
 
-  useEffect(() => {
-    async function fetchData() {
-      // You can await here
-      const response = await fetch(
-        "https://eonet.sci.gsfc.nasa.gov/api/v3/events"
-      )
-
-      if (!response.ok) {
-        console.log(response.error)
-        return
-      }
-
-      const data = await response.json()
-      setEvents(data.events)
-    }
-    fetchData()
-  }, [])
-  */
-  const { loading, error, data } = useQuery(FETCH_ALL_EVENTS)
+  const { loading, error, data } = useQuery(FETCH_EVENTS_DATE_RANGE, {
+    variables: { limit: "10", start: "2021-01-01", end: "2021-04-22" },
+  })
   console.log(loading, error, data)
   const events = data.events
 
@@ -76,14 +56,12 @@ function EventList() {
   )
 }
 
-/*
-TODO: see above re: Too Many Requests
-*/
-const FETCH_ALL_EVENTS = gql`
-  query allEvents {
-    events {
+const FETCH_EVENTS_DATE_RANGE = gql`
+  query fetchSomeEvents($limit: String!, $start: String!, $end: String!) {
+    events(limit: $limit, start: $start, end: $end) {
       date
       description
+      id
       title
       coordinates {
         lat

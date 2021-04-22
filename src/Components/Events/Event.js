@@ -1,5 +1,6 @@
 import { React } from "react"
-import { useQuery, gql } from "@apollo/client"
+import { useQuery } from "@apollo/client"
+import gql from "graphql-tag"
 import { useParams } from "react-router-dom"
 import EventImage from "./EventImage"
 
@@ -94,3 +95,54 @@ const FETCH_EVENT_BY_ID = gql`
 `
 
 export default Event
+
+/*
+query MyQuery {
+  events(end: "2021-04-22", limit: "5", start: "2021-01-01") {
+    date
+    description
+    id
+    title
+    coordinates {
+      lat
+      lon
+    }
+    category {
+      id
+      title
+    }
+    magnitudeUnit
+    magnitudeValue
+    coordinateType
+    sources {
+      id
+      url
+    }
+  }
+}
+
+query event {
+  event(id: "EONET_5305") {
+    date
+    description
+    id
+    title
+    coordinates {
+      lat
+      lon
+    }
+    category {
+      id
+      title
+    }
+    magnitudeUnit
+    magnitudeValue
+    coordinateType
+    sources {
+      id
+      url
+    }
+  }
+}
+
+*/

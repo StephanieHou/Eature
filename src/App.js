@@ -17,9 +17,6 @@ function App() {
         <Switch>
           <Route path="/events/:event_id" children={<Event />} />
         </Switch>
-        <Switch>
-          <Route path="/map/:limit/:start/:end" component={Map} />
-        </Switch>
       </div>
     </Router>
   )

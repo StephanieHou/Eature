@@ -6,7 +6,7 @@ const EventImage = ({ lat, lon, date, dim }) => {
 
   return (
     <div>
-      <img src={imageUrl} alt="oooo purrrrty" />
+      <img src={imageUrl} alt="img" />
     </div>
   )
 }
