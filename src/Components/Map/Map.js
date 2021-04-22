@@ -11,6 +11,7 @@ const Container = styled.div`
 
 const Map = () => {
   const [events, setEvents] = useState(null)
+  const [eventID, setEventID] = useState(null)
 
   useEffect(() => {
     async function fetchData() {
@@ -39,9 +40,9 @@ const Map = () => {
 
   return (
     <Main className="Map-Landing">
-      <Sidebar />
+      <Sidebar id={eventID} />
       <Container className="Map-Wrapper">
-        <LeafletMap data={events} />
+        <LeafletMap data={events} id={eventID} setEventID={setEventID} />
       </Container>
     </Main>
   )

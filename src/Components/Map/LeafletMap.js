@@ -15,7 +15,7 @@ const Container = styled.div`
   min-height: 700px;
 `
 
-const LeafletMap = ({ data }) => {
+const LeafletMap = ({ data, id, setEventID }) => {
   const url =
     "https://api.mapbox.com/styles/v1/" +
     REACT_APP_LEAFLET_USER +
@@ -23,11 +23,11 @@ const LeafletMap = ({ data }) => {
     REACT_APP_LEAFLET_MAP_ID +
     "/tiles/256/{z}/{x}/{y}@2x?access_token=" +
     REACT_APP_LEAFLET_ACCESS_TOKEN
-    
+
   return (
     <Main className="Leaflet-Map">
       <Container className="Map" id="Eature-Map">
-        <MapContainer center={[51.505, -0.09]} zoom={5} scrollWheelZoom={true}>
+        <MapContainer center={[51.505, -0.09]} zoom={3} scrollWheelZoom={true}>
           <TileLayer
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             url={url}
@@ -48,8 +48,14 @@ const LeafletMap = ({ data }) => {
                 <Popup>
                   {event.title}
                   <br />
-                  {parseFloat(event.geometry[0].coordinates[0])}{" "}
-                  {parseFloat(event.geometry[0].coordinates[1])}
+                  {"Lat:"}
+                  {parseFloat(event.geometry[0].coordinates[0])}
+                  <br />
+                  {"Long:"}{parseFloat(event.geometry[0].coordinates[1])}
+                  <br />  <br />
+                  Type: {event.categories[0].title}
+                  <br />
+                  <a href={event.sources[0].url}>Source</a>
                 </Popup>
               </Marker>
             ))}
@@ -60,3 +66,13 @@ const LeafletMap = ({ data }) => {
 }
 
 export default LeafletMap
+
+/*
+{"id":"EONET_5305",
+"title":"Tropical Cyclone Jobo",
+"description":null,
+"link":"https://eonet.sci.gsfc.nasa.gov/api/v3/events/EONET_5305",
+"closed":null,"categories":[{"id":"severeStorms","title":"Severe Storms"}],
+"sources":[{"id":"JTWC","url":"https://www.metoc.navy.mil/jtwc/products/sh2921.tcw"}],
+"geometry":[{"magnitudeValue":35,"magnitudeUnit":"kts","date":"2021-04-20T18:00:00Z","type":"Point","coordinates":[49.6,-10.2]},{"magnitudeValue":45,"magnitudeUnit":"kts","date":"2021-04-21T00:00:00Z","type":"Point","coordinates":[48.8,-10]}]}
+*/
