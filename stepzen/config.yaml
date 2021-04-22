@@ -1,4 +1,0 @@
-configurationset:
-  - configuration:
-      name: nasa_config
-      apikey: DEMO_KEY
