@@ -18,11 +18,11 @@ const Container = styled.div`
 const LeafletMap = ({ data, id, setEventID }) => {
   const url =
     "https://api.mapbox.com/styles/v1/" +
-    REACT_APP_LEAFLET_USER +
+    "shou94" +
     "/" +
-    REACT_APP_LEAFLET_MAP_ID +
+    "cknrxzbnx157017qo9oemv1uf"+
     "/tiles/256/{z}/{x}/{y}@2x?access_token=" +
-    REACT_APP_LEAFLET_ACCESS_TOKEN
+    "pk.eyJ1Ijoic2hvdTk0IiwiYSI6ImNrbnJ4dDg3ZTBtdm0yd3BoYXUzNXNsOTEifQ.aAUh-Nc0vIQMbbtWQfg0DQ"
 
   return (
     <Main className="Leaflet-Map">
