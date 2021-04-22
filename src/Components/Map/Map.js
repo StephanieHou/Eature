@@ -17,8 +17,7 @@ const Map = () => {
     async function fetchData() {
       const api_key = NASA_API_KEY
 
-      // TODO use a UI widget for these values:
-      const limit = 25
+      const limit = 50
       const start = "2020-01-01"
       const end = "2021-04-22"
 
