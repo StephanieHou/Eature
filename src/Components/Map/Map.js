@@ -14,8 +14,8 @@ const Map = () => {
   const [events, setEvents] = useState(null)
   const [eventID, setEventID] = useState(null)
   const [limit, setLimit] = useState(70)
-  const [startDate, setStartDate] = useState("2020-01-01")
-  const [endDate, setEndDate] = useState("2021-04-21")
+  const [startDate, setStartDate] = useState(new Date())
+  const [endDate, setEndDate] = useState(new Date())
 
   useEffect(() => {
     async function fetchData() {
