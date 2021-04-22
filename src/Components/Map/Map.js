@@ -4,29 +4,46 @@ import styled from "styled-components"
 import { Main, Sidebar } from "../Styled"
 import LeafletMap from "./LeafletMap"
 
+const { NASA_API_KEY } = process.env
+
 const Container = styled.div`
   width: 100%;
 `
 
 const Map = () => {
-  // let { limit, start, end } = {
-  const limit = "10"
-  const start = "2021-01-01"
-  const end = "2021-04-21"
-  // let limit = 10 limit || ""
-  // let start = start || ""
-  // let end = end || ""
-  const { loading, error, data } = useQuery(FETCH_EVENTS_DATE_RANGE, {
-    variables: { limit, start, end },
-  })
-  console.log(loading, error, data)
-  const events = data.events
+  const [events, setEvents] = useState(null)
+  const [eventID, setEventID] = useState(null)
+
+  useEffect(() => {
+    async function fetchData() {
+      const api_key = NASA_API_KEY
+
+      // TODO use a UI widget for these values:
+      const limit = 25
+      const start = "2020-01-01"
+      const end = "2021-04-22"
+
+      // You can await here
+      const response = await fetch(
+        `https://eonet.sci.gsfc.nasa.gov/api/v3/events?api_key=${api_key}&limit=${limit}&start=${start}&end=${end}`
+      )
+
+      if (!response.ok) {
+        console.log(response.error)
+        return
+      }
+
+      const data = await response.json()
+      setEvents(data.events)
+    }
+    fetchData()
+  }, [])
 
   return (
     <Main className="Map-Landing">
-      <Sidebar />
+      <Sidebar id={eventID} />
       <Container className="Map-Wrapper">
-        <LeafletMap data={events} />
+        <LeafletMap data={events} id={eventID} setEventID={setEventID} />
       </Container>
     </Main>
   )

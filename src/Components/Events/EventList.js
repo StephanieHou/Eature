@@ -1,9 +1,8 @@
 import { React, useEffect, useState, useQuery } from "react"
 import { gql } from "@apollo/client"
 import styled from "styled-components"
-
-import Spinner from "../Spinner"
 import { Main, Navbar, Footer } from "../Styled"
+import Spinner from "./Spinner"
 
 const Container = styled.div`
   width: 100%;

@@ -1,6 +1,5 @@
 import React, { useState } from "react"
 import { Link } from "react-router-dom"
-import { FaMapMarkedAlt } from "react-icons/fa"
 import { SiOpenstreetmap } from "react-icons/si"
 import { GiWorld } from "react-icons/gi"
 import styled from "styled-components"
@@ -65,7 +64,7 @@ const Title = styled.h1`
   font-size: 20px;
 `
 
-const Sidebar = () => {
+const Sidebar = ({id}) => {
   const [open, setOpen] = useState(false)
   const [info, setInfo] = useState(false)
   const [data, setData] = useState(false)
@@ -74,11 +73,11 @@ const Sidebar = () => {
       <Link to="/">
         <Image src={Logo} alt="Eature Logo" />
       </Link>
-      <IconLinks onClick={() => setOpen(!open)}>
+      <IconLinks onClick={() => setOpen(open)}>
         <SiOpenstreetmap style={iconStyles} />
         <LinkLabel open={open}>Information</LinkLabel>
       </IconLinks>
-      <IconLinks onClick={() => setOpen(!open)}>
+      <IconLinks onClick={() => setOpen(open)}>
         <GiWorld style={iconStyles} />
         <LinkLabel open={open}>World Data</LinkLabel>
       </IconLinks>
