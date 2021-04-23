@@ -12,12 +12,12 @@ interface Event {
   magnitudeUnit: String
   sources: [EventSource] @materializer(query: "sources")
   categories: [EventCategory] @materializer(query: "categories")
-  coordinates: [CoordWrapper] @materializer(query: "coordinates")
+  coordinates: CoordWrapper @materializer(query: "coordinates")
 }
 
 interface CoordWrapper {
-  lat: Float
-  lon: Float
+  lat: String
+  lon: String
 }
 
 interface EventCategory {
@@ -42,7 +42,7 @@ type EventSourceNASA implements EventSource {}
 # PredictHQ Types
 #
 type EventPHQ implements Event {
-  category: String
+  # category: String
   # String # TODO: I want to take  to fit into "categories" of Event interface.
 }
 type CoordWrapperPHQ implements CoordWrapper {}
@@ -59,7 +59,7 @@ type Query {
   events(limit: String!, start: String!, end: String!): [Event]
   event(id: String!): Event
 
-  coordinates(id: String!): [CoordWrapper]
+  coordinates(id: String!): CoordWrapper
   sources(id: String!): [EventSource]
   categories(id: String!): [EventCategory]
 
@@ -105,7 +105,7 @@ type Query {
       resultroot: "categories[]"
     )
 
-  coordinatesNASA(id: String!): [CoordWrapperNASA]
+  coordinatesNASA(id: String!): CoordWrapperNASA
     @supplies (query: "coordinates")
     @rest(
       endpoint: "https://us-central1-stepzen-web-staging.cloudfunctions.net/keyArraytoValueArray/?root=root.geometry[0].coordinates&fields=lon,lat&url=https://eonet.sci.gsfc.nasa.gov/api/v3/events/$id?limit=1&api_key=$api_key"
@@ -142,13 +142,4 @@ type Query {
       endpoint: "https://us-central1-stepzen-web-staging.cloudfunctions.net/keyArraytoValueArray/?root=root.results[0].location&fields=lon,lat&url=https://api.predicthq.com/v1/events?id=$id"
       configuration: "predicthq_config"
     )
-    # TODO: why does this return a nested structure? Remove the null and collapse the array
-    #  { "coordinates": [
-    #     {
-    #       "lat": -5.1569,
-    #       "lon": 153.0172
-    #     },
-    #     null
-    #   ],
-    #  }
 }
