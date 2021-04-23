@@ -5,21 +5,11 @@ Visualize events recorded by NASA's Earth Observatory Natural Event Tracker (EON
 - [NASA APIs](https://api.nasa.gov/)
 - [EONET API Documentation](https://eonet.sci.gsfc.nasa.gov/docs/v3)
 - [Example API data](https://eonet.sci.gsfc.nasa.gov/api/v2.1/events/EONET_5300)
+- [Events from PredictHQ API](https://docs.predicthq.com/api/requests/)
 
 # StepZen
 
-[StepZen](https://my.stepzen.com/)
-
-Can't get past this error:
-
-```
-Deploying to StepZen...... !
-(node:69868) UnhandledPromiseRejectionWarning: SyntaxError: Unexpected token A in JSON at position 0
-    at JSON.parse (<anonymous>)
-    at logError (/usr/local/lib/node_modules/stepzen/lib/start/deploy.js:47:34)
-    at Object.exports.default [as deploy] (/usr/local/lib/node_modules/stepzen/lib/start/deploy.js:59:17)
-(node:69868) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). To terminate the node process on unhandled promise rejection, use the CLI flag `--unhandled-rejections=strict` (see https://nodejs.org/api/cli.html#cli_unhandled_rejections_mode). (rejection id: 17)
-```
+We are using [StepZen](https://my.stepzen.com/) to unify multiple REST APIs into a single GraphQL interface for our app to query.
 
 # Dev Setup
 
@@ -49,21 +39,29 @@ for [URL](https://api.nasa.gov/planetary/earth/imagery?lon=-101.05&lat=-74.95&da
 https://api.nasa.gov/planetary/earth/imagery?lon=-101.05&lat=-74.95&date=2017-09-23&dim=0.2&api_key=DEMO_KEY
 ```
 
-The issue is...
+The issue is... maybe try dim=0.5 ?
 
 ## TypeError: Object(...) is not a function
 
 Make sure you're importing `useQuery` from "@apollo/client"! Or, you're importing a hook from the wrong module!
 
+## StepZen's graphiql UI won't load in browser
+
+Make sure your `config.yaml` file is there.
+
 # Production Deployment
 
-todo
+Netlify works.
+
+Make sure you add your `.env` variables to the environment in their web UI.
 
 # API Data Structures
 
 ## Example NASA EONET api results
 
 [Super Typhoon Surigae](https://eonet.sci.gsfc.nasa.gov/api/v3/events/EONET_5300)
+
+Notice that the `geometry` array is a time series.
 
 ```json
 {
@@ -112,51 +110,5 @@ todo
 
 - https://api.nasa.gov/planetary/earth/imagery?lon=137.7&lat=8.5&date=2021-03-01&dim=0.5&api_key=DEMO_KEY
 - https://api.nasa.gov/planetary/earth/imagery?lon=137.7&lat=8.5&date=2021-04-14&dim=0.5&api_key=DEMO_KEY
-
-## Example graphql query
-
-```graphql
-{
-  getEventById(id: "EONET_5300") {
-    description
-    id
-    title
-    coordinates {
-      lat
-      lon
-    }
-    date
-    geoType
-  }
-}
-```
-
-## Super Typhoon Surigae
-
-```json
-{
-  "data": {
-    "coordinates": [
-      {
-        "lat": "137.7",
-        "lon": "8.5"
-      }
-    ],
-    "getEventById": {
-      "coordinates": [
-        {
-          "lat": "137.7",
-          "lon": "8.5"
-        }
-      ],
-      "date": "2021-04-14T00:00:00Z",
-      "description": null,
-      "geoType": "Point",
-      "id": "EONET_5300",
-      "title": "Super Typhoon Surigae"
-    }
-  }
-}
-```
 
 - https://api.nasa.gov/planetary/earth/imagery?lon=137.7&lat=8.5&date=2021-04-14&dim=0.5&api_key=DEMO_KEY
