@@ -6,7 +6,7 @@ import {
   Switch,
 } from "react-router-dom"
 import Event from "./Components/Events/Event"
-import EventList from "./Components/Events/EventList"
+import EventList from "./Pages/EventList"
 import Home from "./Components/Home/Home"
 import Map from "./Components/Map/Map"
 import "./App.css"

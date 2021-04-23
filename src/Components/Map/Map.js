@@ -3,9 +3,8 @@ import { useParams } from "react-router-dom"
 import { useQuery } from "@apollo/client"
 import gql from "graphql-tag"
 import styled from "styled-components"
-import { Main, Sidebar } from "../Styled"
+import { Main, Sidebar, Spinner } from "../Styled"
 import LeafletMap from "./LeafletMap"
-import Spinner from "../Events/Spinner"
 
 const Container = styled.div`
   width: 100%;

@@ -3,8 +3,7 @@ import { useParams } from "react-router-dom"
 import { useQuery } from "@apollo/client"
 import gql from "graphql-tag"
 import styled from "styled-components"
-import { Main, Navbar, Footer } from "../Styled"
-import Spinner from "./Spinner"
+import { Main, Navbar, Footer, Spinner } from "../Components/Styled"
 
 const Container = styled.div`
   width: 100%;
