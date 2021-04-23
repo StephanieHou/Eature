@@ -13,12 +13,11 @@ interface Event {
   sources: [EventSource] @materializer(query: "sources")
   categories: [EventCategory] @materializer(query: "categories")
   coordinates: [CoordWrapper] @materializer(query: "coordinates")
-  count: String
 }
 
 interface CoordWrapper {
-  lat: String
-  lon: String
+  lat: Float
+  lon: Float
 }
 
 interface EventCategory {
@@ -42,7 +41,10 @@ type EventSourceNASA implements EventSource {}
 #
 # PredictHQ Types
 #
-type EventPHQ implements Event{
+type EventPHQ implements Event {
+  category: String
+  labels: String
+  # String # TODO: I want to take  to fit into "categories" of Event interface.
 }
 type CoordWrapperPHQ implements CoordWrapper {}
 type EventCategoryPHQ implements EventCategory {}
@@ -123,7 +125,6 @@ type Query {
       resultroot: "results[]"
       setters: [
         { field: "date", path: "start" }
-        # { field: "coordinates", path: "location[]" }
       ]
     )
 
@@ -135,4 +136,20 @@ type Query {
       resultroot: "results[]"
       setters: [{ field: "date", path: "start" }]
     )
+
+  coordinatesPHQ(id: String!): CoordWrapperPHQ
+    @supplies(query: "coordinates")
+    @rest(
+      endpoint: "https://us-central1-stepzen-web-staging.cloudfunctions.net/keyArraytoValueArray/?root=root.results[0].location&fields=lon,lat&url=https://api.predicthq.com/v1/events?id=$id"
+      configuration: "predicthq_config"
+    )
+    # TODO: why does this return a nested structure? Remove the null and collapse the array
+    #  { "coordinates": [
+    #     {
+    #       "lat": -5.1569,
+    #       "lon": 153.0172
+    #     },
+    #     null
+    #   ],
+    #  }
 }
