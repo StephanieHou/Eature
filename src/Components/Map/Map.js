@@ -44,7 +44,7 @@ const Map = () => {
             </div>
           </Error>
         )}
-        {!loading && !data && <div>Error loading events data.</div>}
+        {!loading && !data && <Error>Error loading events data.</Error>}
         {!loading && data && (
           <LeafletMap data={data.events} id={eventID} setEventID={setEventID} />
         )}

@@ -3,6 +3,8 @@ import styled from "styled-components"
 import { Main } from "../Styled"
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet"
 
+import EventImage from "../Events/EventImage"
+
 const {
   REACT_APP_LEAFLET_ACCESS_TOKEN,
   REACT_APP_LEAFLET_USER,
@@ -13,6 +15,11 @@ const Container = styled.div`
   width: 100%;
   height: 100vh;
   min-height: 700px;
+`
+
+const ImageContainer = styled.div`
+  width: 200px;
+  height: 200px;
 `
 
 const LeafletMap = ({ data, id, setEventID }) => {
@@ -60,6 +67,15 @@ const LeafletMap = ({ data, id, setEventID }) => {
                   >
                     What's here?
                   </a>
+                  {/* <ImageContainer>
+                    <span>Satellite Image</span>
+                    <br />
+                    <EventImage
+                      lat={event.coordinates.lat}
+                      lon={event.coordinates.lon}
+                      date={event.date}
+                    />
+                  </ImageContainer> */}
                   <br /> <br />
                 </Popup>
               </Marker>
