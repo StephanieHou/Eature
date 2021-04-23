@@ -20,6 +20,30 @@ const AnimatedDiv = styled.div`
   -webkit-text-fill-color: transparent;
   -webkit-background-clip: text;
   white-space: pre-line;
+
+  @media only screen and (max-width: 1100px) {
+    font-size: ${({ lgfontsize }) => lgfontsize || `10rem`};
+  }
+
+  @media only screen and (max-width: 940px) {
+    font-size: ${({ lg2fontsize }) => lg2fontsize || `14vw`};
+  }
+
+  @media only screen and (max-width: 790px) {
+    font-size: ${({ mdfontsize }) => mdfontsize || `16vw`};
+  }
+
+  @media only screen and (max-width: 590px) {
+    font-size: ${({ smfontsize }) => smfontsize || `17.8vw`};
+  }
+
+  @media only screen and (max-width: 450px) {
+    font-size: ${({ sm2fontsize }) => sm2fontsize || `20vw`};
+  }
+
+  @media only screen and (max-width: 390px) {
+    font-size: ${({ sm2fontsize }) => sm2fontsize || `23vw`};
+  }
 `
 
 const AnimatedText = ({
@@ -28,6 +52,7 @@ const AnimatedText = ({
   width,
   height,
   fontsize,
+  lgfontsize,
   margintop,
   text,
 }) => {
@@ -38,6 +63,7 @@ const AnimatedText = ({
       width={width}
       height={height}
       fontsize={fontsize}
+      lgfontsize={lgfontsize}
       margintop={margintop}
     >
       {" "}
