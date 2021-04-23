@@ -1,3 +1,6 @@
+#
+# Interfaces
+#
 interface Event {
   id: String!
   title: String!
@@ -28,11 +31,26 @@ interface EventSource {
   url: String
 }
 
+#
+# NASA Types
+#
 type EventNASA implements Event {}
 type CoordWrapperNASA implements CoordWrapper {}
 type EventCategoryNASA implements EventCategory {}
 type EventSourceNASA implements EventSource {}
 
+#
+# PredictHQ Types
+#
+type EventPHQ implements Event{
+}
+type CoordWrapperPHQ implements CoordWrapper {}
+type EventCategoryPHQ implements EventCategory {}
+type EventSourcePHQ implements EventSource {}
+
+#
+# Queries
+#
 type Query {
   #
   # Unified Events GraphQL API
@@ -45,7 +63,8 @@ type Query {
   categories(id: String!): [EventCategory]
 
   #
-  # Begin NASA REST API supplies
+  # NASA REST API @supplies
+  # https://eonet.sci.gsfc.nasa.gov/docs/v3
   #
   eventsNASA(limit: String!, start: String!, end: String!): [EventNASA]
     @supplies(query: "events")
@@ -90,5 +109,30 @@ type Query {
     @rest(
       endpoint: "https://us-central1-stepzen-web-staging.cloudfunctions.net/keyArraytoValueArray/?root=root.geometry[0].coordinates&fields=lon,lat&url=https://eonet.sci.gsfc.nasa.gov/api/v3/events/$id?limit=1&api_key=$api_key"
       configuration: "nasa_config"
+    )
+
+  #
+  # PredictHQ Events REST API @supplies
+  # https://docs.predicthq.com/api/requests/
+  #
+  eventsPHQ(limit: String!, start: String!, end: String!): [EventPHQ]
+    @supplies(query: "events")
+    @rest(
+      endpoint: "https://api.predicthq.com/v1/events?category=disasters&limit=$limit&start.gte=$start&end.lte=$end"
+      configuration: "predicthq_config"
+      resultroot: "results[]"
+      setters: [
+        { field: "date", path: "start" }
+        # { field: "coordinates", path: "location[]" }
+      ]
+    )
+
+  eventPHQ(id: String!): EventPHQ
+    @supplies(query: "event")
+    @rest(
+      endpoint: "https://api.predicthq.com/v1/events?id=$id"
+      configuration: "predicthq_config"
+      resultroot: "results[]"
+      setters: [{ field: "date", path: "start" }]
     )
 }
