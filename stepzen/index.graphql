@@ -1,3 +1,3 @@
-schema @sdl(files: ["nasa.graphql"]) {
+schema @sdl(files: ["events.graphql"]) {
   query: Query
 }

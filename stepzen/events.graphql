@@ -43,7 +43,6 @@ type EventSourceNASA implements EventSource {}
 #
 type EventPHQ implements Event {
   category: String
-  labels: String
   # String # TODO: I want to take  to fit into "categories" of Event interface.
 }
 type CoordWrapperPHQ implements CoordWrapper {}
