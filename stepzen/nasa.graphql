@@ -7,36 +7,47 @@ interface Event {
   coordinateType: String
   magnitudeValue: String
   magnitudeUnit: String
-  # sources: [EventSource]
-  # category: EventCategory
+  sources: [EventSource] @materializer(query: "sources")
+  categories: [EventCategory] @materializer(query: "categories")
   coordinates: [CoordWrapper] @materializer(query: "coordinates")
   count: String
 }
-
-type NASAEvent implements Event {}
 
 interface CoordWrapper {
   lat: String
   lon: String
 }
 
-type CoordWrapperNASA implements CoordWrapper {}
-
-type EventCategory {
+interface EventCategory {
   id: String
   title: String
 }
 
-type EventSource {
+interface EventSource {
   id: String
   url: String
 }
 
+type EventNASA implements Event {}
+type CoordWrapperNASA implements CoordWrapper {}
+type EventCategoryNASA implements EventCategory {}
+type EventSourceNASA implements EventSource {}
+
 type Query {
+  #
+  # Unified Events GraphQL API
+  #
   events(limit: String!, start: String!, end: String!): [Event]
   event(id: String!): Event
 
-  NASAEvents(limit: String!, start: String!, end: String!): [NASAEvent]
+  coordinates(id: String!): [CoordWrapper]
+  sources(id: String!): [EventSource]
+  categories(id: String!): [EventCategory]
+
+  #
+  # Begin NASA REST API supplies
+  #
+  eventsNASA(limit: String!, start: String!, end: String!): [EventNASA]
     @supplies(query: "events")
     @rest(
       endpoint: "https://eonet.sci.gsfc.nasa.gov/api/v3/events?api_key=$api_key&limit=$limit&start=$start&end=$end"
@@ -45,7 +56,7 @@ type Query {
       setters: [{ field: "date", path: "geometry[].date" }]
     )
 
-  NASAEvent(id: String!): NASAEvent
+  eventNASA(id: String!): EventNASA
     @supplies(query: "event")
     @rest(
       endpoint: "https://eonet.sci.gsfc.nasa.gov/api/v3/events/$id?limit=1&api_key=$api_key"
@@ -58,21 +69,21 @@ type Query {
       ]
     )
 
-  # sources(id: String!): [EventSource]
-  #   @rest(
-  #     endpoint: "https://eonet.sci.gsfc.nasa.gov/api/v3/events/$id?limit=1"
-  #     configuration: "nasa_config"
-  #     resultroot: "sources[]"
-  #   )
+  sourcesNASA(id: String!): [EventSourceNASA]
+    @supplies(query: "sources")
+    @rest(
+      endpoint: "https://eonet.sci.gsfc.nasa.gov/api/v3/events/$id?limit=1&api_key=$api_key"
+      configuration: "nasa_config"
+      resultroot: "sources[]"
+    )
 
-  # categories(id: String!): [EventCategory]
-  #   @rest(
-  #     endpoint: "https://eonet.sci.gsfc.nasa.gov/api/v3/events/$id?limit=1"
-  #     configuration: "nasa_config"
-  #     resultroot: "categories[]"
-  #   )
-
-  coordinates(id: String!): [CoordWrapper]
+  categoriesNASA(id: String!): [EventCategoryNASA]
+    @supplies (query: "categories")
+    @rest(
+      endpoint: "https://eonet.sci.gsfc.nasa.gov/api/v3/events/$id?limit=1&api_key=$api_key"
+      configuration: "nasa_config"
+      resultroot: "categories[]"
+    )
 
   coordinatesNASA(id: String!): [CoordWrapperNASA]
     @supplies (query: "coordinates")
