@@ -20,9 +20,11 @@ const LeafletMap = ({ data, id, setEventID }) => {
     "https://api.mapbox.com/styles/v1/" +
     "shou94" +
     "/" +
-    "cknrxzbnx157017qo9oemv1uf"+
+    "cknrxzbnx157017qo9oemv1uf" +
     "/tiles/256/{z}/{x}/{y}@2x?access_token=" +
     "pk.eyJ1Ijoic2hvdTk0IiwiYSI6ImNrbnJ4dDg3ZTBtdm0yd3BoYXUzNXNsOTEifQ.aAUh-Nc0vIQMbbtWQfg0DQ"
+
+  console.log(data)
 
   return (
     <Main className="Leaflet-Map">
@@ -37,25 +39,28 @@ const LeafletMap = ({ data, id, setEventID }) => {
               <Marker
                 key={i}
                 position={
-                  parseFloat(event.geometry[0].coordinates[1])
-                    ? [
-                        parseFloat(event.geometry[0].coordinates[1]),
-                        parseFloat(event.geometry[0].coordinates[0]),
-                      ]
-                    : [1.0, parseFloat(event.geometry[0].coordinates[0])]
+                  event.coordinates.lat && [
+                    parseFloat(event.coordinates.lat),
+                    parseFloat(event.coordinates.lon),
+                  ]
                 }
               >
                 <Popup>
                   {event.title}
+                  <div>
+                    {new Intl.DateTimeFormat("en-US", {
+                      dateStyle: "long",
+                      timeStyle: "short",
+                    }).format(new Date(event.date))}
+                  </div>
                   <br />
-                  {"Lat:"}
-                  {parseFloat(event.geometry[0].coordinates[0])}
-                  <br />
-                  {"Long:"}{parseFloat(event.geometry[0].coordinates[1])}
-                  <br />  <br />
-                  Type: {event.categories[0].title}
-                  <br />
-                  <a href={event.sources[0].url}>Source</a>
+                  {`Location: ${event.coordinates.lat}, ${event.coordinates.lon} `}
+                  <a
+                    href={`https://google.com/maps?q=${event.coordinates.lat},${event.coordinates.lon}`}
+                  >
+                    What's here?
+                  </a>
+                  <br /> <br />
                 </Popup>
               </Marker>
             ))}

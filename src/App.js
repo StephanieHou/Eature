@@ -16,7 +16,7 @@ function App() {
     <Router>
       <div>
         <Route exact path="/" component={Home} />
-        <Route exact path="/map" component={Map}>
+        <Route exact path="/map">
           <Redirect to="/map/10/2021-01-01/2021-04-22" />
         </Route>
         <Switch>

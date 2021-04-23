@@ -46,21 +46,20 @@ function EventList() {
         )}
         <div>
           <ol>
-            {/* {data &&
+            {data &&
               data.events &&
               data.events.length > 0 &&
               data.events.map((evt, i) => (
                 <li key={i}>
                   <a href={"/events/" + evt.id}>
                     {evt.title} |{" "}
-                    {evt.geometry[0] &&
-                      new Intl.DateTimeFormat("en-US", {
-                        dateStyle: "long",
-                        timeStyle: "short",
-                      }).format(new Date(evt.geometry[0].date))}
+                    {new Intl.DateTimeFormat("en-US", {
+                      dateStyle: "long",
+                      timeStyle: "short",
+                    }).format(new Date(evt.date))}
                   </a>
                 </li>
-              ))} */}
+              ))}
           </ol>
         </div>
       </Container>
@@ -79,17 +78,6 @@ const FETCH_EVENTS_DATE_RANGE = gql`
       coordinates {
         lat
         lon
-      }
-      category {
-        id
-        title
-      }
-      magnitudeUnit
-      magnitudeValue
-      coordinateType
-      sources {
-        id
-        url
       }
     }
   }

@@ -32,19 +32,14 @@ function Event() {
     <div>
       <div>{eventData.id}</div>
       <div>{eventData.title}</div>
-      <div>Category: {eventData.category[0].title}</div>
       <div>
-        Coords: {eventData.coordinates[0].lat}, {eventData.coordinates[0].lon}
+        Coords: {eventData.coordinates.lat}, {eventData.coordinates.lon}
       </div>
       <div>
         {new Intl.DateTimeFormat("en-US", {
           dateStyle: "long",
           timeStyle: "short",
         }).format(new Date(eventData.date))}
-      </div>
-      <div>
-        {eventData.category.id === "severeStorms" && "Wind speed:"}{" "}
-        {eventData.magnitudeValue} {eventData.magnitudeUnit}
       </div>
       <div>
         {eventData.sources &&
@@ -58,10 +53,10 @@ function Event() {
       </div>
       <div>
         <EventImage
-          lat={eventData.coordinates[0].lat}
-          lon={eventData.coordinates[0].lon}
+          lat={eventData.coordinates.lat}
+          lon={eventData.coordinates.lon}
           date={eventData.date.substr(0, 10)}
-          dim="0.2"
+          dim="0.25"
         />
       </div>
     </div>
@@ -78,17 +73,6 @@ const FETCH_EVENT_BY_ID = gql`
       coordinates {
         lat
         lon
-      }
-      category {
-        id
-        title
-      }
-      magnitudeUnit
-      magnitudeValue
-      coordinateType
-      sources {
-        id
-        url
       }
     }
   }
@@ -107,17 +91,6 @@ query MyQuery {
       lat
       lon
     }
-    category {
-      id
-      title
-    }
-    magnitudeUnit
-    magnitudeValue
-    coordinateType
-    sources {
-      id
-      url
-    }
   }
 }
 
@@ -130,17 +103,6 @@ query event {
     coordinates {
       lat
       lon
-    }
-    category {
-      id
-      title
-    }
-    magnitudeUnit
-    magnitudeValue
-    coordinateType
-    sources {
-      id
-      url
     }
   }
 }
