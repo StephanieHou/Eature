@@ -1,68 +1,70 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
+import { useParams } from "react-router-dom"
+import { useQuery } from "@apollo/client"
+import gql from "graphql-tag"
 import styled from "styled-components"
-import { Main, Sidebar } from "../Styled"
+import { Main, Sidebar, Spinner } from "../Styled"
 import LeafletMap from "./LeafletMap"
-import moment from "moment"
-
-const { NASA_API_KEY } = process.env
 
 const Container = styled.div`
   width: 100%;
 `
+const Loader = styled.div`
+  padding: 10% 50%;
+`
+
+const Error = styled.div`
+  padding: 10px 40px;
+`
 
 const Map = () => {
-  const [events, setEvents] = useState(null)
+  const { limit, start, end } = useParams()
+
+  const { loading, error, data } = useQuery(FETCH_EVENTS_DATE_RANGE, {
+    variables: { limit, start, end },
+  })
+
   const [eventID, setEventID] = useState(null)
-  const [limit, setLimit] = useState(70)
-  const [startDate, setStartDate] = useState(new Date())
-  const [endDate, setEndDate] = useState(new Date())
-
-  useEffect(() => {
-    async function fetchData() {
-      const api_key = NASA_API_KEY
-      const startFormat = moment(startDate).format("YYYY-MM-DD")
-      const endFormat = moment(endDate).format("YYYY-MM-DD")
-
-      const url =
-        "https://eonet.sci.gsfc.nasa.gov/api/v3/events?api_key=" +
-        api_key +
-        "&limit=" +
-        limit +
-        "&start=" +
-        startFormat +
-        "&end=" +
-        endFormat
-
-      const response = await fetch(url)
-
-      if (!response.ok) {
-        console.log(response.error)
-        return
-      }
-
-      const data = await response.json()
-      setEvents(data.events)
-    }
-    fetchData()
-  }, [limit, startDate, endDate])
 
   return (
     <Main className="Map-Landing">
-      <Sidebar
-        id={eventID}
-        events={events}
-        limit={limit}
-        setLimit={setLimit}
-        startDate={startDate}
-        setStartDate={setStartDate}
-        endDate={endDate}
-        setEndDate={setEndDate}
-      />
+      <Sidebar id={eventID} />
       <Container className="Map-Wrapper">
-        <LeafletMap data={events} id={eventID} setEventID={setEventID} />
+        {loading && (
+          <Loader>
+            <Spinner />
+          </Loader>
+        )}
+        {error && (
+          <Error>
+            <h1>Error :(</h1>
+            <div>
+              <p>{JSON.stringify(error)}</p>
+            </div>
+          </Error>
+        )}
+        {!loading && !data && <Error>Error loading events data.</Error>}
+        {!loading && data && (
+          <LeafletMap data={data.events} id={eventID} setEventID={setEventID} />
+        )}
       </Container>
     </Main>
   )
 }
 
 export default Map
+
+const FETCH_EVENTS_DATE_RANGE = gql`
+  query($limit: String!, $start: String!, $end: String!) {
+    events(limit: $limit, start: $start, end: $end) {
+      date
+      description
+      id
+      title
+      coordinates {
+        lat
+        lon
+      }
+    }
+  }
+`

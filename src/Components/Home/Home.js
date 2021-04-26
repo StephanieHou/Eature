@@ -63,7 +63,7 @@ const Section = styled.div`
   @media only screen and (max-width: 900px) {
     padding: 10px 5%;
   }
-`;
+`
 
 const Middle = styled.div`
   width: ${({ width }) => width || `100%`};
@@ -81,17 +81,17 @@ const Middle = styled.div`
     grid-template-columns: none;
     text-align: center;
   }
-`;
+`
 
 const MiddleHeader = styled.h1`
   color: var(--color-5);
   margin: 0px;
-`;
+`
 
 const MiddleText = styled.p`
   color: white;
   font-size: 18px;
-`;
+`
 
 const MiddleImg = styled.div`
   background: var(--color-5);
@@ -102,7 +102,7 @@ const MiddleImg = styled.div`
   border-radius: 143px;
   padding: 5px;
 
-  img{
+  img {
     width: 100%;
   }
 
@@ -110,7 +110,7 @@ const MiddleImg = styled.div`
     height: 250px;
     width: 250px;
   }
-`;
+`
 
 const Home = () => {
   return (
@@ -127,8 +127,8 @@ const Home = () => {
             />
           </AnimatedTextDiv>
           <HeaderText>
-            Eature combines Google Maps with EONET to show you all of
-            nature&apos;s phenomenons
+            Eature combines Maps with EONET to show you all of nature&apos;s
+            phenomenons
           </HeaderText>
           <Link to="/map">
             <Button>Start Eature &gt;</Button>
@@ -142,16 +142,17 @@ const Home = () => {
         >
           <Middle>
             <MiddleImg>
-              <img src={EarthImg} alt="Rotating Earth"/>
+              <img src={EarthImg} alt="Rotating Earth" />
             </MiddleImg>
             <div>
               <MiddleHeader>
                 Explore <br /> Natural Events
               </MiddleHeader>
               <MiddleText>
-               Avalanches, earthquakes, wildfires, hurricanes, and volcanoes are only a 
-               few of the natural phenomenons that occur on Earth. Eature's goal is to 
-               show comprehensive data on the occurances of these natural events in a simplistic map ui.
+                Avalanches, earthquakes, wildfires, hurricanes, and volcanoes
+                are only a few of the natural phenomenons that occur on Earth.
+                Eature's goal is to show comprehensive data on the occurances of
+                these natural events in a simplistic map ui.
               </MiddleText>
             </div>
           </Middle>

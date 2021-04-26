@@ -5,10 +5,11 @@ Visualize events recorded by NASA's Earth Observatory Natural Event Tracker (EON
 - [NASA APIs](https://api.nasa.gov/)
 - [EONET API Documentation](https://eonet.sci.gsfc.nasa.gov/docs/v3)
 - [Example API data](https://eonet.sci.gsfc.nasa.gov/api/v2.1/events/EONET_5300)
+- [Events from PredictHQ API](https://docs.predicthq.com/api/requests/)
 
 # StepZen
 
-[StepZen](https://my.stepzen.com/)
+We are using [StepZen](https://my.stepzen.com/) to unify multiple REST APIs into a single GraphQL interface for our app to query.
 
 # Dev Setup
 
@@ -24,15 +25,43 @@ Starts React frontend
 
 Launches local stepzen graphiql explorer and backend data sources
 
+# Dev Tips
+
+If NASA imagery api gives you:
+
+```json
+{ "msg": "No imagery for specified date.", "service_version": "v5000" }
+```
+
+for [URL](https://api.nasa.gov/planetary/earth/imagery?lon=-101.05&lat=-74.95&date=2017-09-23&dim=0.2&api_key=DEMO_KEY)
+
+```
+https://api.nasa.gov/planetary/earth/imagery?lon=-101.05&lat=-74.95&date=2017-09-23&dim=0.2&api_key=DEMO_KEY
+```
+
+The issue is... maybe try dim=0.5 ?
+
+## TypeError: Object(...) is not a function
+
+Make sure you're importing `useQuery` from "@apollo/client"! Or, you're importing a hook from the wrong module!
+
+## StepZen's graphiql UI won't load in browser
+
+Make sure your `config.yaml` file is there.
+
 # Production Deployment
 
-todo
+Netlify works.
+
+Make sure you add your `.env` variables to the environment in their web UI.
 
 # API Data Structures
 
 ## Example NASA EONET api results
 
 [Super Typhoon Surigae](https://eonet.sci.gsfc.nasa.gov/api/v3/events/EONET_5300)
+
+Notice that the `geometry` array is a time series.
 
 ```json
 {
@@ -81,51 +110,5 @@ todo
 
 - https://api.nasa.gov/planetary/earth/imagery?lon=137.7&lat=8.5&date=2021-03-01&dim=0.5&api_key=DEMO_KEY
 - https://api.nasa.gov/planetary/earth/imagery?lon=137.7&lat=8.5&date=2021-04-14&dim=0.5&api_key=DEMO_KEY
-
-## Example graphql query
-
-```graphql
-{
-  getEventById(id: "EONET_5300") {
-    description
-    id
-    title
-    coordinates {
-      lat
-      lon
-    }
-    date
-    geoType
-  }
-}
-```
-
-## Super Typhoon Surigae
-
-```json
-{
-  "data": {
-    "coordinates": [
-      {
-        "lat": "137.7",
-        "lon": "8.5"
-      }
-    ],
-    "getEventById": {
-      "coordinates": [
-        {
-          "lat": "137.7",
-          "lon": "8.5"
-        }
-      ],
-      "date": "2021-04-14T00:00:00Z",
-      "description": null,
-      "geoType": "Point",
-      "id": "EONET_5300",
-      "title": "Super Typhoon Surigae"
-    }
-  }
-}
-```
 
 - https://api.nasa.gov/planetary/earth/imagery?lon=137.7&lat=8.5&date=2021-04-14&dim=0.5&api_key=DEMO_KEY

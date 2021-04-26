@@ -3,6 +3,8 @@ import styled from "styled-components"
 import { Main } from "../Styled"
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet"
 
+import EventImage from "../Events/EventImage"
+
 const {
   REACT_APP_LEAFLET_ACCESS_TOKEN,
   REACT_APP_LEAFLET_USER,
@@ -15,14 +17,21 @@ const Container = styled.div`
   min-height: 700px;
 `
 
+const ImageContainer = styled.div`
+  width: 200px;
+  height: 200px;
+`
+
 const LeafletMap = ({ data, id, setEventID }) => {
   const url =
     "https://api.mapbox.com/styles/v1/" +
-    "shou94" +
+    REACT_APP_LEAFLET_USER +
     "/" +
-    "cknrxzbnx157017qo9oemv1uf"+
+    REACT_APP_LEAFLET_MAP_ID +
     "/tiles/256/{z}/{x}/{y}@2x?access_token=" +
-    "pk.eyJ1Ijoic2hvdTk0IiwiYSI6ImNrbnJ4dDg3ZTBtdm0yd3BoYXUzNXNsOTEifQ.aAUh-Nc0vIQMbbtWQfg0DQ"
+    REACT_APP_LEAFLET_ACCESS_TOKEN
+
+  console.log(data)
 
   return (
     <Main className="Leaflet-Map">
@@ -37,25 +46,37 @@ const LeafletMap = ({ data, id, setEventID }) => {
               <Marker
                 key={i}
                 position={
-                  parseFloat(event.geometry[0].coordinates[1])
-                    ? [
-                        parseFloat(event.geometry[0].coordinates[1]),
-                        parseFloat(event.geometry[0].coordinates[0]),
-                      ]
-                    : [1.0, parseFloat(event.geometry[0].coordinates[0])]
+                  event.coordinates.lat && [
+                    parseFloat(event.coordinates.lat),
+                    parseFloat(event.coordinates.lon),
+                  ]
                 }
               >
                 <Popup>
                   {event.title}
+                  <div>
+                    {new Intl.DateTimeFormat("en-US", {
+                      dateStyle: "long",
+                      timeStyle: "short",
+                    }).format(new Date(event.date))}
+                  </div>
                   <br />
-                  {"Lat: "}
-                  {parseFloat(event.geometry[0].coordinates[0])}
-                  <br />
-                  {"Long: "}{parseFloat(event.geometry[0].coordinates[1])}
-                  <br />  <br />
-                  Type: {event.categories[0].title}
-                  <br />
-                  <a href={event.sources[0].url}>Source</a>
+                  {`Location: ${event.coordinates.lat}, ${event.coordinates.lon} `}
+                  <a
+                    href={`https://google.com/maps?q=${event.coordinates.lat},${event.coordinates.lon}`}
+                  >
+                    What's here?
+                  </a>
+                  {/* <ImageContainer>
+                    <span>Satellite Image</span>
+                    <br />
+                    <EventImage
+                      lat={event.coordinates.lat}
+                      lon={event.coordinates.lon}
+                      date={event.date}
+                    />
+                  </ImageContainer> */}
+                  <br /> <br />
                 </Popup>
               </Marker>
             ))}
